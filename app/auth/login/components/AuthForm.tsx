@@ -10,31 +10,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-react';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import type { LoginFormProps } from '@/lib/types';
 
-export default function SignupForm() {
-  const [email, setEmail] = useState('');
-  const router = useRouter();
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
-    const res = await signIn('credentials', {
-      email,
-      redirect: false,
-    });
-
-    console.log(res);
-
-    if (res?.ok) {
-      router.push('/dashboard');
-    } else {
-      alert('Login or registration error');
-    }
-  }
-
+export default function AuthForm({
+  email,
+  onEmailChange,
+  onSubmit,
+}: LoginFormProps) {
   return (
     <div className='flex min-h-screen items-center justify-center p-4'>
       <Card className='w-full max-w-sm'>
@@ -46,14 +28,14 @@ export default function SignupForm() {
           <CardDescription>Enter your email to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className='space-y-4'>
+          <form onSubmit={onSubmit} className='space-y-4'>
             <div className='space-y-2'>
               <Input
                 id='email'
                 type='email'
                 placeholder='Email'
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={onEmailChange}
                 required
               />
             </div>

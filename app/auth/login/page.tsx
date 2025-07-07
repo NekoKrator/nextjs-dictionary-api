@@ -1,9 +1,34 @@
-import SignupForm from './components/SignupForm';
+'use client';
 
-export default function SignInPage() {
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import LoginForm from './components/AuthForm';
+
+export default function AuthPage() {
+  const [email, setEmail] = useState('');
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const res = await signIn('credentials', {
+      email,
+      redirect: false,
+    });
+
+    if (res?.ok) {
+      router.push('/dashboard');
+    } else {
+      console.log('Login or registration error');
+    }
+  }
+
   return (
-    <>
-      <SignupForm />
-    </>
+    <LoginForm
+      email={email}
+      onEmailChange={(e) => setEmail(e.target.value)}
+      onSubmit={handleSubmit}
+    />
   );
 }

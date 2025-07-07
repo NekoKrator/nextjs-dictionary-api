@@ -14,3 +14,9 @@ export interface User {
 export interface DashboardClientProps {
   user: User;
 }
+
+export interface LoginFormProps {
+  email: string
+  onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onSubmit: (e: React.FormEvent) => void
+}
