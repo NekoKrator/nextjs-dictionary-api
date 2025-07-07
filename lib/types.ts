@@ -15,6 +15,10 @@ export interface DashboardClientProps {
   user: User;
 }
 
+export interface AddWordDialogProps {
+  onWordAdded: () => void;
+}
+
 export interface LoginFormProps {
   email: string
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void

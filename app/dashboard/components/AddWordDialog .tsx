@@ -7,12 +7,10 @@ import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { addWord } from '@/lib/api';
+import type { AddWordDialogProps } from '@/lib/types';
 
-export default function AddWordDialog({
-  onWordAdded,
-}: {
-  onWordAdded: () => void;
-}) {
+export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [word, setWord] = useState('');
   const [translation, setTranslation] = useState('');
@@ -21,19 +19,14 @@ export default function AddWordDialog({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const res = await fetch('/api/words', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ word, translation, example }),
-    });
-
-    if (res.ok) {
+    try {
+      await addWord(word, translation, example);
       setIsModalOpen(false);
       setWord('');
       setTranslation('');
       setExample('');
       onWordAdded();
-    } else {
+    } catch {
       console.log('Failed to save the word');
     }
   }
