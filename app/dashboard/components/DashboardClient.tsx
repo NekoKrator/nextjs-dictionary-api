@@ -8,8 +8,13 @@ import { LogOut } from 'lucide-react';
 import Dictionary from './Dictionary';
 import AddWordDialog from './AddWordDialog ';
 import type { User } from '@/lib/types';
+import { useState } from 'react';
 
 export default function DashboardClient({ user }: { user: User }) {
+  const [reloadFlag, setReloadFlag] = useState(0);
+
+  const triggerReload = () => setReloadFlag((prev) => prev + 1);
+
   return (
     <div>
       <div>
@@ -18,8 +23,8 @@ export default function DashboardClient({ user }: { user: User }) {
           <LogOut /> Log out
         </Button>
       </div>
-      <AddWordDialog />
-      <Dictionary />
+      <AddWordDialog onWordAdded={triggerReload} />
+      <Dictionary reloadFlag={reloadFlag} />
     </div>
   );
 }

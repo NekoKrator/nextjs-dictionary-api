@@ -8,7 +8,11 @@ import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
-export default function AddWordDialog() {
+export default function AddWordDialog({
+  onWordAdded,
+}: {
+  onWordAdded: () => void;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [word, setWord] = useState('');
   const [translation, setTranslation] = useState('');
@@ -28,10 +32,12 @@ export default function AddWordDialog() {
       setWord('');
       setTranslation('');
       setExample('');
+      onWordAdded();
     } else {
       console.log('Failed to save the word');
     }
   }
+
   return (
     <>
       <div>
