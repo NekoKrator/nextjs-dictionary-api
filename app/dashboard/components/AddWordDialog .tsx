@@ -42,7 +42,6 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
       <Dialog
         open={isModalOpen}
         onOpenChange={(open) => {
-          console.log('Modal open:', open);
           setIsModalOpen(open);
         }}
       >
