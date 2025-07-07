@@ -23,3 +23,15 @@ export async function addWord(word: string, translation: string, example?: strin
 
   return res.json()
 }
+
+export async function deleteWord(id: number) {
+  const res = await fetch(`/api/words?id=${id}`, {
+    method: 'DELETE',
+  })
+
+  if (!res.ok) {
+    console.log('Failed to delete the word');
+  }
+
+  return res.json()
+}

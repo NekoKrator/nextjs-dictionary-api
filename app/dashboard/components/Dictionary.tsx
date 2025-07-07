@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { Word, DictionaryProps } from '@/lib/types';
 import { useEffect, useState } from 'react';
-import { fetchWords } from '@/lib/api';
+import { fetchWords, deleteWord } from '@/lib/api';
 import AddWordDialog from './AddWordDialog ';
 import { filterWords } from '@/lib/filter';
 import { Book, Trash2 } from 'lucide-react';
@@ -16,7 +16,6 @@ export default function Dictionary({ searchTerm }: DictionaryProps) {
   const triggerReload = () => setReloadFlag((prev) => prev + 1);
 
   const filteredWords = filterWords(words, searchTerm);
-
   useEffect(() => {
     fetchWords().then(setWords);
   }, [reloadFlag]);
@@ -62,7 +61,10 @@ export default function Dictionary({ searchTerm }: DictionaryProps) {
                       <Button
                         variant='ghost'
                         size='sm'
-                        // onClick={() => deleteWord(id)}
+                        onClick={async () => {
+                          deleteWord(id);
+                          triggerReload();
+                        }}
                         className='opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-600'
                       >
                         <Trash2 className='h-4 w-4' />
