@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardHeader,
@@ -21,8 +23,10 @@ export default function SignupForm() {
 
     const res = await signIn('credentials', {
       email,
-      redirect: true,
+      redirect: false,
     });
+
+    console.log(res);
 
     if (res?.ok) {
       router.push('/dashboard');

@@ -27,16 +27,16 @@ export const authConfig: NextAuthOptions = {
             }
           })
 
-          return { id: newUser.id, email: newUser.email }
+          return { id: newUser.id.toString(), email: newUser.email }
         }
 
-        return { id: user.id, email: user.email }
+        return { id: user.id.toString(), email: user.email }
       }
     })
   ],
   session: { strategy: 'jwt' },
   pages: {
-    signIn: '#' // /auth/signin
+    signIn: '/auth/signin'
   },
   callbacks: {
     session: ({ session, token }) => ({ ...session, user: { ...session.user, id: token.sub } })
