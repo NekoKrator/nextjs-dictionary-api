@@ -1,18 +1,9 @@
-import { authConfig } from "@/lib/auth";
-import { getServerSession } from "next-auth/next";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from '@/lib/db';
+import { getUserFromSession } from '@/lib/session'
 
 export async function GET() {
-  const session = await getServerSession(authConfig);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email }
-  });
+  const user = await getUserFromSession()
 
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -27,15 +18,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getServerSession(authConfig);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email }
-  });
+  const user = await getUserFromSession()
 
   if (!user) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
