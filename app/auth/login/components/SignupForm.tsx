@@ -36,28 +36,33 @@ export default function SignupForm() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div>
-          <Mail />
-        </div>
-        <CardTitle>Please Login/Register</CardTitle>
-        <CardDescription>Enter your Email for login</CardDescription>
-      </CardHeader>
-
-      <CardContent>
-        <form onSubmit={handleSubmit}>
-          <Input
-            id='email'
-            type='email'
-            placeholder='Email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Button type='submit'>Login</Button>
-        </form>
-      </CardContent>
-    </Card>
+    <div className='flex min-h-screen items-center justify-center p-4'>
+      <Card className='w-full max-w-sm'>
+        <CardHeader className='space-y-1 text-center'>
+          <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted'>
+            <Mail className='h-6 w-6' />
+          </div>
+          <CardTitle className='text-2xl'>Login or Register</CardTitle>
+          <CardDescription>Enter your email to continue</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className='space-y-4'>
+            <div className='space-y-2'>
+              <Input
+                id='email'
+                type='email'
+                placeholder='Email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <Button type='submit' className='w-full'>
+              Login
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
