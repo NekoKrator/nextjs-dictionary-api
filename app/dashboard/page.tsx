@@ -1,10 +1,8 @@
-import type { Word } from '@/lib/types';
+// app/dashboard/page.tsx (серверный, без 'use client')
+
 import { getUserFromSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
-import Dictionary from './components/Dictionary';
-import AddWordDialog from './components/AddWordDialog ';
+import DashboardClient from './components/DashboardClient';
 
 export default async function DashboardPage() {
   const user = await getUserFromSession();
@@ -13,16 +11,5 @@ export default async function DashboardPage() {
     redirect('/auth/login');
   }
 
-  return (
-    <div>
-      <div>
-        <h1>Dictionary of {user.email}</h1>
-        <Button>
-          <LogOut>Log out</LogOut>
-        </Button>
-      </div>
-      <AddWordDialog />
-      <Dictionary />
-    </div>
-  );
+  return <DashboardClient user={{ email: user.email }} />;
 }

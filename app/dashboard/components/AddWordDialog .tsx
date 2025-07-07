@@ -25,23 +25,19 @@ export default function AddWordDialog() {
             <DialogHeader>
               <DialogTitle>Add new word</DialogTitle>
             </DialogHeader>
-
             <div>
               <div>
                 <Label htmlFor='word'>Word</Label>
                 <Input id='word' placeholder='Enter word' />
               </div>
-
               <div>
                 <Label htmlFor='translation'>translation</Label>
                 <Input id='translation' placeholder='Enter translation' />
               </div>
-
               <div>
                 <Label htmlFor='example'>Example of usage (optional)</Label>
                 <Input id='example' placeholder='Enter example' />
               </div>
-
               <Button>Save</Button>
             </div>
           </DialogContent>
