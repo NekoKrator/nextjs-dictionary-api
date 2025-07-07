@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export interface Word {
   id: number
   word: string
@@ -23,4 +25,13 @@ export interface LoginFormProps {
   email: string
   onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onSubmit: (e: React.FormEvent) => void
+}
+
+export interface SearchAndStatsProps {
+  searchTerm: string;
+  setSearchTerm: Dispatch<SetStateAction<string>>;
+}
+
+export interface DictionaryProps {
+  searchTerm: string;
 }
