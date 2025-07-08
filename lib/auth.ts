@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from './db'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import bcrypt from 'bcrypt';
 
 export const authConfig: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -9,10 +10,11 @@ export const authConfig: NextAuthOptions = {
     CredentialsProvider({
       name: 'credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' }
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.email) {
+        if (!credentials?.email && !credentials?.password) {
           return null
         }
 
@@ -21,13 +23,22 @@ export const authConfig: NextAuthOptions = {
         })
 
         if (!user) {
+          const hashedPassword = await bcrypt.hash(credentials.password, 10)
+
           const newUser = await prisma.user.create({
             data: {
-              email: credentials.email
+              email: credentials.email,
+              password: hashedPassword
             }
           })
 
           return { id: newUser.id.toString(), email: newUser.email }
+        }
+
+        const isValid = await bcrypt.compare(credentials.password, user.password)
+
+        if (!isValid) {
+          return null
         }
 
         return { id: user.id.toString(), email: user.email }

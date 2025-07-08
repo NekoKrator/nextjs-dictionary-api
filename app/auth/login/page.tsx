@@ -7,6 +7,7 @@ import LoginForm from './components/AuthForm';
 
 export default function AuthPage() {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
@@ -27,7 +28,9 @@ export default function AuthPage() {
   return (
     <LoginForm
       email={email}
+      password={password}
       onEmailChange={(e) => setEmail(e.target.value)}
+      onPasswordChange={(e) => setPassword(e.target.value)}
       onSubmit={handleSubmit}
     />
   );
