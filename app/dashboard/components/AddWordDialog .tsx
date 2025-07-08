@@ -59,7 +59,9 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
 
             <div className='space-y-4'>
               <div>
-                <Label htmlFor='word'>Word</Label>
+                <Label htmlFor='word' className='mb-1'>
+                  Word
+                </Label>
                 <Input
                   id='word'
                   placeholder='Enter word'
@@ -70,7 +72,9 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
               </div>
 
               <div>
-                <Label htmlFor='translation'>Translation</Label>
+                <Label htmlFor='translation' className='mb-1'>
+                  Translation
+                </Label>
                 <Input
                   id='translation'
                   placeholder='Enter translation'
@@ -81,7 +85,9 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
               </div>
 
               <div>
-                <Label htmlFor='example'>Example (optional)</Label>
+                <Label htmlFor='example' className='mb-1'>
+                  Example (optional)
+                </Label>
                 <Input
                   id='example'
                   placeholder='Enter example sentence'

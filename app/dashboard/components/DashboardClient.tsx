@@ -40,12 +40,7 @@ export default function DashboardClient({ user }: DashboardClientProps) {
             Sign out
           </Button>
         </div>
-
-        {/* Search and Stats */}
         <SearchAndStats searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-        {/* Words List */}
-        {/* <AddWordDialog onWordAdded={triggerReload} /> */}
         <Dictionary searchTerm={searchTerm} />
       </div>
     </div>

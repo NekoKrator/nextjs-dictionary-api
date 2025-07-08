@@ -38,6 +38,14 @@ export default function AuthForm({
                 onChange={onEmailChange}
                 required
               />
+              <Input
+                id='password'
+                type='password'
+                placeholder='Password'
+                value={email}
+                onChange={onEmailChange}
+                required
+              />
             </div>
             <Button type='submit' className='w-full'>
               Login
