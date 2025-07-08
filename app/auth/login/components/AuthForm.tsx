@@ -14,7 +14,9 @@ import type { LoginFormProps } from '@/lib/types';
 
 export default function AuthForm({
   email,
+  password,
   onEmailChange,
+  onPasswordChange,
   onSubmit,
 }: LoginFormProps) {
   return (
@@ -42,8 +44,8 @@ export default function AuthForm({
                 id='password'
                 type='password'
                 placeholder='Password'
-                value={email}
-                onChange={onEmailChange}
+                value={password}
+                onChange={onPasswordChange}
                 required
               />
             </div>
