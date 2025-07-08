@@ -15,6 +15,7 @@ export default function AuthPage() {
 
     const res = await signIn('credentials', {
       email,
+      password,
       redirect: false,
     });
 

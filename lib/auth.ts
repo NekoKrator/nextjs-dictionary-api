@@ -14,35 +14,54 @@ export const authConfig: NextAuthOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.email && !credentials?.password) {
-          return null
+        try {
+          console.log('authorize called with:', credentials);
+
+          if (!credentials?.email || !credentials?.password) {
+            console.log('Missing email or password');
+            return null;
+          }
+
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          });
+          console.log('User from DB:', user);
+
+          if (!user) {
+            console.log('User not found, creating new user');
+            const hashedPassword = await bcrypt.hash(credentials.password, 10);
+
+            const newUser = await prisma.user.create({
+              data: {
+                email: credentials.email,
+                password: hashedPassword
+              }
+            });
+            console.log('Created user:', newUser);
+
+            return { id: newUser.id.toString(), email: newUser.email };
+          }
+
+          if (!user.password) {
+            console.log('User exists but no password');
+            return null;
+          }
+
+          const isValid = await bcrypt.compare(credentials.password, user.password);
+          console.log('Password valid:', isValid);
+
+          if (!isValid) {
+            console.log('Invalid password');
+            return null;
+          }
+
+          return { id: user.id.toString(), email: user.email };
+        } catch (error) {
+          console.error('Authorize error:', error);
+          return null;
         }
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        })
-
-        if (!user) {
-          const hashedPassword = await bcrypt.hash(credentials.password, 10)
-
-          const newUser = await prisma.user.create({
-            data: {
-              email: credentials.email,
-              password: hashedPassword
-            }
-          })
-
-          return { id: newUser.id.toString(), email: newUser.email }
-        }
-
-        const isValid = await bcrypt.compare(credentials.password, user.password)
-
-        if (!isValid) {
-          return null
-        }
-
-        return { id: user.id.toString(), email: user.email }
       }
+
     })
   ],
   session: { strategy: 'jwt' },
