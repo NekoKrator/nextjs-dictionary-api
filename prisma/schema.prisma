@@ -21,13 +21,40 @@ model User {
   words     Word[]
 }
 
-model Word {
-  id          Int       @id @default(autoincrement())
-  word        String
-  translation String
-  example     String
-  createdAt   DateTime  @default(now())
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+enum WordStatus {
+  NEW
+  LEARNING
+  MASTERED
 }
+
+enum PartOfSpeech {
+  NOUN
+  VERB
+  ADJECTIVE
+  ADVERB
+  PRONOUN
+  PREPOSITION
+  CONJUNCTION
+  INTERJECTION
+  ARTICLE
+}
+
+model Word {
+  id            Int          @id @default(autoincrement())
+  word          String
+  translation   String
+  transcription String?
+  partOfSpeech  PartOfSpeech?
+  forms         String?
+  example       String?
+  synonyms      String?
+  tags          String?
+  notes         String?
+  status        WordStatus   @default(NEW)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  userId        Int
+  user          User         @relation(fields: [userId], references: [id])
+}
+
 
