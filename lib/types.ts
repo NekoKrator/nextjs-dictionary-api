@@ -30,6 +30,19 @@ export interface Word {
   userId: number;
 }
 
+export interface WordData {
+  word: string;
+  transcription?: string;
+  translation: string;
+  partOfSpeech?: string;
+  forms?: string;
+  example?: string;
+  synonyms?: string;
+  tags?: string;
+  notes?: string;
+}
+
+
 export interface User {
   id?: number
   email: string

@@ -32,7 +32,6 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
   const [forms, setForms] = useState('');
   const [example, setExample] = useState('');
   const [synonyms, setSynonyms] = useState('');
-  const [antonyms, setAntonyms] = useState('');
   const [tags, setTags] = useState('');
   const [notes, setNotes] = useState('');
 
@@ -52,7 +51,17 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
     e.preventDefault();
 
     try {
-      await addWord(word, translation, example);
+      await addWord({
+        word,
+        transcription,
+        translation,
+        partOfSpeech,
+        forms,
+        example,
+        synonyms,
+        tags,
+        notes,
+      });
       setIsModalOpen(false);
 
       setWord('');
@@ -62,7 +71,6 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
       setForms('');
       setExample('');
       setSynonyms('');
-      setAntonyms('');
       setTags('');
       setNotes('');
 
@@ -180,18 +188,6 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
                   placeholder='word1, word2, word3'
                   value={synonyms}
                   onChange={(e) => setSynonyms(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor='antonyms' className='mb-1'>
-                  Antonyms
-                </Label>
-                <Input
-                  id='antonyms'
-                  placeholder='word1, word2, word3'
-                  value={antonyms}
-                  onChange={(e) => setAntonyms(e.target.value)}
                 />
               </div>
 

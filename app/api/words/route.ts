@@ -24,21 +24,35 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
-  const data = await request.json();
+  try {
+    const data = await request.json();
 
-  if (!data.word || !data.translation) {
-    return NextResponse.json({ error: 'Word and translation are required' }, { status: 400 });
+    if (!data.word || !data.translation) {
+      return NextResponse.json({ error: 'Word and translation are required' }, { status: 400 });
+    }
+
+    const newWord = await prisma.word.create({
+      data: {
+        word: data.word,
+        transcription: data.transcription || null,
+        translation: data.translation,
+        partOfSpeech: data.partOfSpeech ? data.partOfSpeech.toUpperCase() : null,
+        forms: data.forms || null,
+        example: data.example || null,
+        synonyms: data.synonyms || null,
+        tags: data.tags || null,
+        notes: data.notes || null,
+        userId: user.id,
+      },
+    });
+
+    return NextResponse.json(newWord, { status: 201 });
+  } catch (error) {
+    console.error('Failed to add word:', error);
+    return NextResponse.json({ error: 'Failed to add word' }, { status: 500 });
   }
-
-  const newWord = await prisma.word.create({
-    data: {
-      ...data,
-      userId: user.id,
-    },
-  });
-
-  return NextResponse.json(newWord, { status: 201 });
 }
+
 
 export async function DELETE(request: NextRequest) {
   const user = await getUserFromSession()
