@@ -1,11 +1,33 @@
 import { Dispatch, SetStateAction } from 'react';
 
+export type PartOfSpeech =
+  | 'NOUN'
+  | 'VERB'
+  | 'ADJECTIVE'
+  | 'ADVERB'
+  | 'PRONOUN'
+  | 'PREPOSITION'
+  | 'CONJUNCTION'
+  | 'INTERJECTION'
+  | 'ARTICLE';
+
+export type WordStatus = 'NEW' | 'LEARNING' | 'MASTERED';
+
 export interface Word {
-  id: number
-  word: string
-  translation: string
-  example?: string
-  createdAt: string
+  id: number;
+  word: string;
+  translation: string;
+  transcription?: string;
+  partOfSpeech?: PartOfSpeech;
+  forms?: string;
+  example?: string;
+  synonyms?: string;
+  tags?: string;
+  notes?: string;
+  status: WordStatus;
+  createdAt: string;
+  updatedAt: string;
+  userId: number;
 }
 
 export interface User {
