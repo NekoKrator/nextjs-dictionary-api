@@ -1,9 +1,11 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@import 'tailwindcss/preflight';
-@import 'tailwindcss/utilities';
-@import 'tailwindcss/components';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Остальные ваши стили */
 
 @custom-variant dark (&:is(.dark *));
 
