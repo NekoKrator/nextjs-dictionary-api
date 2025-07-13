@@ -1,13 +1,15 @@
-@import 'tailwindcss';
+/* Удаляем некорректный импорт tailwindcss и custom-variant/theme */
 @import 'tw-animate-css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Остальные ваши стили */
-
-@custom-variant dark (&:is(.dark *));
+@layer components {
+  .border-border {
+    border: 1px solid rgb(var(--border) / 1);
+  }
+}
 
 @theme inline {
   --color-background: var(--background);
