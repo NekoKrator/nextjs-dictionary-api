@@ -1,34 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from '@/lib/db';
 import { getUserFromSession } from '@/lib/session'
+import { ApiError } from '@/lib/api-error';
+
+async function userCheck() {
+  const user = await getUserFromSession();
+  if (!user) {
+    throw new ApiError('User not found', 404);
+  }
+  return user;
+}
 
 export async function GET() {
-  const user = await getUserFromSession()
+  try {
+    const user = await userCheck();
 
-  if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    const words = await prisma.word.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return NextResponse.json(words);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-
-  const words = await prisma.word.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: 'desc' }
-  })
-
-  return NextResponse.json(words)
 }
 
 export async function POST(request: NextRequest) {
-  const user = await getUserFromSession()
-
-  if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 });
-  }
-
   try {
+    const user = await userCheck();
     const data = await request.json();
 
     if (!data.word || !data.translation) {
-      return NextResponse.json({ error: 'Word and translation are required' }, { status: 400 });
+      throw new ApiError('Word and translation are required', 400);
     }
 
     const newWord = await prisma.word.create({
@@ -39,7 +46,7 @@ export async function POST(request: NextRequest) {
         partOfSpeech: data.partOfSpeech ? data.partOfSpeech.toUpperCase() : null,
         forms: data.forms || null,
         example: data.example || null,
-        synonyms: data.synonyms || null,
+        synonyms: data.synonyms || [],
         tags: data.tags || null,
         notes: data.notes || null,
         userId: user.id,
@@ -48,37 +55,38 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newWord, { status: 201 });
   } catch (error) {
+    if (error instanceof ApiError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
     console.error('Failed to add word:', error);
     return NextResponse.json({ error: 'Failed to add word' }, { status: 500 });
   }
 }
 
-
 export async function DELETE(request: NextRequest) {
-  const user = await getUserFromSession()
+  try {
+    const user = await userCheck();
 
-  if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      throw new ApiError('Missing ID', 400);
+    }
+
+    const word = await prisma.word.findUnique({ where: { id: Number(id) } });
+
+    if (!word || word.userId !== user.id) {
+      throw new ApiError('Word not found or unauthorized', 404);
+    }
+
+    await prisma.word.delete({ where: { id: Number(id) } });
+
+    return NextResponse.json({ message: 'Word deleted' }, { status: 200 });
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
+    return NextResponse.json({ error: 'Failed to delete word' }, { status: 500 });
   }
-
-  const { searchParams } = new URL(request.url)
-  const id = searchParams.get('id')
-
-  if (!id) {
-    return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
-  }
-
-  const word = await prisma.word.findUnique({
-    where: { id: Number(id) }
-  })
-
-  if (!word || word.userId !== user.id) {
-    return NextResponse.json({ error: 'Word not found or unauthorized' }, { status: 404 });
-  }
-
-  await prisma.word.delete({
-    where: { id: Number(id) }
-  })
-
-  return NextResponse.json({ message: 'Word deleted' }, { status: 200 })
 }
