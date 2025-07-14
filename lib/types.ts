@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 
+export type WordStatus = 'NEW' | 'LEARNING' | 'MASTERED';
+
 export type PartOfSpeech =
   | 'NOUN'
   | 'VERB'
@@ -9,37 +11,37 @@ export type PartOfSpeech =
   | 'PREPOSITION'
   | 'CONJUNCTION'
   | 'INTERJECTION'
-  | 'ARTICLE';
-
-export type WordStatus = 'NEW' | 'LEARNING' | 'MASTERED';
+  | 'ARTICLE'
+  | null;
 
 export interface Word {
   id: number;
   word: string;
   translation: string;
-  transcription?: string;
-  partOfSpeech?: PartOfSpeech;
-  forms?: string;
-  example?: string;
-  synonyms?: string;
-  tags?: string;
-  notes?: string;
+  transcription?: string | null;
+  audioUrl?: string | null;
+  partOfSpeech?: PartOfSpeech | null;
+  definition?: string | null;
+  example?: string | null;
+  synonyms: string[];
+  userNote?: string | null;
   status: WordStatus;
   createdAt: string;
   updatedAt: string;
   userId: number;
 }
 
-export interface WordData {
+export interface WordInput {
   word: string;
-  transcription?: string;
   translation: string;
-  partOfSpeech?: string;
-  forms?: string;
-  example?: string;
-  synonyms?: string;
-  tags?: string;
-  notes?: string;
+  transcription?: string | null;
+  audioUrl?: string | null;
+  partOfSpeech?: PartOfSpeech | null;
+  definition?: string | null;
+  example?: string | null;
+  synonyms?: string[];
+  userNote?: string | null;
+  status?: WordStatus;
 }
 
 
@@ -71,4 +73,17 @@ export interface SearchAndStatsProps {
 
 export interface DictionaryProps {
   searchTerm: string;
+}
+
+export interface WordInput {
+  word: string;
+  translation: string;
+  transcription?: string | null;
+  audioUrl?: string | null;
+  partOfSpeech?: PartOfSpeech | null;
+  definition?: string | null;
+  example?: string | null;
+  synonyms?: string[];
+  userNote?: string | null;
+  status?: WordStatus;
 }
