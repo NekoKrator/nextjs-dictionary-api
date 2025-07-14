@@ -1,9 +1,6 @@
 -- CreateEnum
 CREATE TYPE "WordStatus" AS ENUM ('NEW', 'LEARNING', 'MASTERED');
 
--- CreateEnum
-CREATE TYPE "PartOfSpeech" AS ENUM ('NOUN', 'VERB', 'ADJECTIVE', 'ADVERB', 'PRONOUN', 'PREPOSITION', 'CONJUNCTION', 'INTERJECTION', 'ARTICLE');
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
@@ -19,12 +16,12 @@ CREATE TABLE "Word" (
     "word" TEXT NOT NULL,
     "translation" TEXT NOT NULL,
     "transcription" TEXT,
-    "partOfSpeech" "PartOfSpeech",
-    "forms" TEXT,
+    "audioUrl" TEXT,
+    "partOfSpeech" TEXT,
+    "definition" TEXT,
     "example" TEXT,
-    "synonyms" TEXT,
-    "tags" TEXT,
-    "notes" TEXT,
+    "synonyms" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "userNote" TEXT,
     "status" "WordStatus" NOT NULL DEFAULT 'NEW',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
