@@ -41,16 +41,17 @@ export async function POST(request: NextRequest) {
     const newWord = await prisma.word.create({
       data: {
         word: data.word,
-        transcription: data.transcription || null,
         translation: data.translation,
+        transcription: data.transcription || null,
+        audioUrl: data.audioUrl || null,
         partOfSpeech: data.partOfSpeech ? data.partOfSpeech.toUpperCase() : null,
-        forms: data.forms || null,
+        definition: data.definition || null,
         example: data.example || null,
         synonyms: data.synonyms || [],
-        tags: data.tags || null,
-        notes: data.notes || null,
+        userNote: data.userNote || null,
+        status: data.status || 'NEW',
         userId: user.id,
-      },
+      }
     });
 
     return NextResponse.json(newWord, { status: 201 });
