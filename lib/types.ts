@@ -74,16 +74,3 @@ export interface SearchAndStatsProps {
 export interface DictionaryProps {
   searchTerm: string;
 }
-
-export interface WordInput {
-  word: string;
-  translation: string;
-  transcription?: string | null;
-  audioUrl?: string | null;
-  partOfSpeech?: PartOfSpeech | null;
-  definition?: string | null;
-  example?: string | null;
-  synonyms?: string[];
-  userNote?: string | null;
-  status?: WordStatus;
-}
