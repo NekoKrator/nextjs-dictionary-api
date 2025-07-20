@@ -28,12 +28,12 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
   const [word, setWord] = useState('');
   const [transcription, setTranscription] = useState('');
   const [translation, setTranslation] = useState('');
+  const [audioUrl, setAudioUrl] = useState('');
   const [partOfSpeech, setPartOfSpeech] = useState('');
-  const [forms, setForms] = useState('');
+  const [definition, setDefinition] = useState('');
   const [example, setExample] = useState('');
   const [synonyms, setSynonyms] = useState('');
-  const [tags, setTags] = useState('');
-  const [notes, setNotes] = useState('');
+  const [userNote, setUserNote] = useState('');
 
   const PARTS_OF_SPEECH = [
     'noun',
@@ -53,26 +53,31 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
     try {
       await addWord({
         word,
-        transcription,
+        transcription: transcription || null,
         translation,
-        partOfSpeech,
-        forms,
-        example,
-        synonyms,
-        tags,
-        notes,
+        audioUrl: audioUrl || null,
+        partOfSpeech: partOfSpeech || null,
+        definition: definition || null,
+        example: example || null,
+        synonyms: synonyms
+          ? synonyms
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean)
+          : [],
+        userNote: userNote || null,
       });
       setIsModalOpen(false);
 
       setWord('');
       setTranscription('');
       setTranslation('');
+      setAudioUrl('');
       setPartOfSpeech('');
-      setForms('');
+      setDefinition('');
       setExample('');
       setSynonyms('');
-      setTags('');
-      setNotes('');
+      setUserNote('');
 
       onWordAdded();
     } catch (error) {
@@ -137,33 +142,45 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
                   />
                 </div>
                 <div>
-                  <Label htmlFor='partOfSpeech' className='mb-1'>
-                    Part of Speech
+                  <Label htmlFor='audioUrl' className='mb-1'>
+                    Audio URL
                   </Label>
-                  <Select value={partOfSpeech} onValueChange={setPartOfSpeech}>
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select part of speech' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PARTS_OF_SPEECH.map((pos) => (
-                        <SelectItem key={pos} value={pos}>
-                          {pos}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    id='audioUrl'
+                    placeholder='https://example.com/audio.mp3'
+                    value={audioUrl}
+                    onChange={(e) => setAudioUrl(e.target.value)}
+                  />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor='forms' className='mb-1'>
-                  Forms
+                <Label htmlFor='partOfSpeech' className='mb-1'>
+                  Part of Speech
+                </Label>
+                <Select value={partOfSpeech} onValueChange={setPartOfSpeech}>
+                  <SelectTrigger>
+                    <SelectValue placeholder='Select part of speech' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PARTS_OF_SPEECH.map((pos) => (
+                      <SelectItem key={pos} value={pos}>
+                        {pos}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor='definition' className='mb-1'>
+                  Definition
                 </Label>
                 <Input
-                  id='forms'
-                  placeholder='run, ran, run (comma separated)'
-                  value={forms}
-                  onChange={(e) => setForms(e.target.value)}
+                  id='definition'
+                  placeholder='Enter definition'
+                  value={definition}
+                  onChange={(e) => setDefinition(e.target.value)}
                 />
               </div>
 
@@ -181,7 +198,7 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
 
               <div>
                 <Label htmlFor='synonyms' className='mb-1'>
-                  Synonyms
+                  Synonyms (comma separated)
                 </Label>
                 <Input
                   id='synonyms'
@@ -192,26 +209,14 @@ export default function AddWordDialog({ onWordAdded }: AddWordDialogProps) {
               </div>
 
               <div>
-                <Label htmlFor='tags' className='mb-1'>
-                  Tags
-                </Label>
-                <Input
-                  id='tags'
-                  placeholder='tag1, tag2, tag3'
-                  value={tags}
-                  onChange={(e) => setTags(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor='notes' className='mb-1'>
+                <Label htmlFor='userNote' className='mb-1'>
                   Notes
                 </Label>
                 <Input
-                  id='notes'
+                  id='userNote'
                   placeholder='Additional notes'
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
+                  value={userNote}
+                  onChange={(e) => setUserNote(e.target.value)}
                 />
               </div>
             </div>

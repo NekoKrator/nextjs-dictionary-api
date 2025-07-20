@@ -9,6 +9,8 @@ import AddWordDialog from './AddWordDialog ';
 import { filterWords } from '@/lib/filter';
 import { Book, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 export default function Dictionary({ searchTerm }: DictionaryProps) {
   const [words, setWords] = useState<Word[]>([]);
@@ -50,13 +52,12 @@ export default function Dictionary({ searchTerm }: DictionaryProps) {
                 word,
                 translation,
                 transcription,
+                audioUrl,
                 partOfSpeech,
-                forms,
+                definition,
                 example,
                 synonyms,
-                tags,
-                notes,
-                status,
+                userNote,
               }) => (
                 <Card
                   key={id}
@@ -80,19 +81,16 @@ export default function Dictionary({ searchTerm }: DictionaryProps) {
                               {partOfSpeech}
                             </Badge>
                           )}
-                          {status && (
-                            <div
-                              className={`w-2 h-2 rounded-full ${
-                                status === 'NEW'
-                                  ? 'bg-red-400'
-                                  : status === 'LEARNING'
-                                  ? 'bg-yellow-400'
-                                  : 'bg-green-400'
-                              }`}
-                              title={`Status: ${status}`}
-                            />
-                          )}
                         </div>
+
+                        {audioUrl && (
+                          <div className='mb-3 max-w-xs'>
+                            <AudioPlayer
+                              src={audioUrl}
+                              showJumpControls={false}
+                            />
+                          </div>
+                        )}
 
                         {/* Translation */}
                         <div className='mb-3'>
@@ -101,18 +99,10 @@ export default function Dictionary({ searchTerm }: DictionaryProps) {
                           </span>
                         </div>
 
-                        {/* Forms */}
-                        {forms && forms.length > 0 && (
-                          <div className='mb-2'>
-                            <span className='text-xs text-slate-500 uppercase tracking-wide'>
-                              Forms:{' '}
-                            </span>
-                            <span className='text-sm text-slate-600'>
-                              {forms
-                                .split(',')
-                                .map((f) => f.trim())
-                                .join(' → ')}
-                            </span>
+                        {/* Definition */}
+                        {definition && (
+                          <div className='mb-2 text-sm text-slate-600'>
+                            {definition}
                           </div>
                         )}
 
@@ -132,55 +122,21 @@ export default function Dictionary({ searchTerm }: DictionaryProps) {
                               Synonyms:{' '}
                             </span>
                             <span className='text-sm text-slate-600'>
-                              {synonyms
-                                .split(',')
-                                .map((s) => s.trim())
-                                .join(', ')}
+                              {synonyms.join(', ')}
                             </span>
                           </div>
                         )}
 
-                        {/* Tags */}
-                        {tags && tags.length > 0 && (
-                          <div className='flex flex-wrap gap-1 mb-2'>
-                            {tags.split(',').map((tag, idx) => (
-                              <Badge
-                                key={idx}
-                                variant='secondary'
-                                className='text-xs'
-                              >
-                                {tag.trim()}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Notes */}
-                        {notes && (
+                        {/* User note */}
+                        {userNote && (
                           <div className='mt-2 p-2 bg-blue-50 border-l-2 border-blue-200 rounded-r'>
-                            <p className='text-sm text-blue-800'>{notes}</p>
+                            <p className='text-sm text-blue-800'>{userNote}</p>
                           </div>
                         )}
                       </div>
 
                       {/* Buttons */}
                       <div className='flex items-center space-x-2'>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='opacity-0 group-hover:opacity-100 transition-opacity text-slate-600 hover:text-blue-600'
-                          title='Update progress'
-                        >
-                          <div
-                            className={`w-3 h-3 rounded-full ${
-                              status === 'NEW'
-                                ? 'bg-red-400'
-                                : status === 'LEARNING'
-                                ? 'bg-yellow-400'
-                                : 'bg-green-400'
-                            }`}
-                          />
-                        </Button>
                         <Button
                           variant='ghost'
                           size='sm'

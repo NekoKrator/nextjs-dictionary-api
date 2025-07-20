@@ -33,16 +33,9 @@ model Word {
   example       String?
   synonyms      String[]   @default([])
   userNote      String?
-  status        WordStatus @default(NEW)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
   userId        Int
   user          User      @relation(fields: [userId], references: [id])
-}
-
-enum WordStatus {
-  NEW
-  LEARNING
-  MASTERED
 }

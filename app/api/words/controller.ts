@@ -18,9 +18,8 @@ export const createWord = async (userId: number, data: WordInput) => {
       partOfSpeech: data.partOfSpeech || null,
       definition: data.definition || null,
       example: data.example || null,
-      synonyms: data.synonyms ?? [],
+      synonyms: Array.isArray(data.synonyms) ? data.synonyms : [],
       userNote: data.userNote || null,
-      status: data.status || 'NEW',
       userId,
     },
   });

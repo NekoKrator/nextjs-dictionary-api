@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 
-export type WordStatus = 'NEW' | 'LEARNING' | 'MASTERED';
 
 export type PartOfSpeech =
   | 'NOUN'
@@ -25,7 +24,6 @@ export interface Word {
   example?: string | null;
   synonyms: string[];
   userNote?: string | null;
-  status: WordStatus;
   createdAt: string;
   updatedAt: string;
   userId: number;
@@ -41,7 +39,6 @@ export interface WordInput {
   example?: string | null;
   synonyms?: string[];
   userNote?: string | null;
-  status?: WordStatus;
 }
 
 
